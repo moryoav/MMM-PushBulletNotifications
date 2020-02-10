@@ -298,12 +298,12 @@ module.exports = NodeHelper.create({
 
         //Get pushes that are sent to target device
         if(pushes.length > 0 && config.filterTargetDeviceName !== "") {
-            //var deviceIden = this.getDeviceIden(devices, config.filterTargetDeviceName);
-	    var deviceIden = config.filterTargetDeviceName;
+            var deviceIden = this.getDeviceIden(devices, config.filterTargetDeviceName);
+	    
             if(deviceIden !== "") {
                 pushes.forEach(function (p) {
                     //Push is sent to specified target device  or sent to all devices (only when filter is specified)
-                    if((p.sender_name === deviceIden) || (p.sender_name == undefined && config.showPushesSentToAllDevices)) {
+                    if((p.target_device_iden === deviceIden) || (p.target_device_iden == undefined && config.showPushesSentToAllDevices)) {
                         filteredPushes.push(p);
                     }
                 });
@@ -325,7 +325,7 @@ module.exports = NodeHelper.create({
             if (p.type === 'note' && p.body != null && !p.body.startsWith("mm:")) { //For now only accept type 'note'. Type 'url' and 'file' not yet implemented
 
                 //Do not show dismissed pushes if showDimissedPushes is set to false
-                if (!(!config.showDismissedPushes && p.dismissed)) {
+                if (!(!config.showDismissedPushes && p.dismissed) && (config.filterSenderName === "" || p.sender_name !== config.filterSenderName)) {
                     if (p.active) { //Do not show deleted pushes
                         responsePushes.push(p);
                     }
