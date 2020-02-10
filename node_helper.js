@@ -298,12 +298,12 @@ module.exports = NodeHelper.create({
 
         //Get pushes that are sent to target device
         if(pushes.length > 0 && config.filterTargetDeviceName !== "") {
-            var deviceIden = this.getDeviceIden(devices, config.filterTargetDeviceName);
-
+            //var deviceIden = this.getDeviceIden(devices, config.filterTargetDeviceName);
+	    var deviceIden = config.filterTargetDeviceName;
             if(deviceIden !== "") {
                 pushes.forEach(function (p) {
                     //Push is sent to specified target device  or sent to all devices (only when filter is specified)
-                    if((p.target_device_iden === deviceIden) || (p.target_device_iden == undefined && config.showPushesSentToAllDevices)) {
+                    if((p.sender_name === deviceIden) || (p.sender_name == undefined && config.showPushesSentToAllDevices)) {
                         filteredPushes.push(p);
                     }
                 });
@@ -318,7 +318,7 @@ module.exports = NodeHelper.create({
 			//No pushes or filterTargetDeviceName
 			filteredPushes = pushes;
         }
-
+	
         //Filter out command pushes
         filteredPushes.forEach(function (p) {
             //Filter out command Magic Mirror
